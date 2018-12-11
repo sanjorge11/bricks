@@ -1,0 +1,82 @@
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+border: 1px solid #337ab7;
+
+background-color: white;
+
+color: #337ab7;
+border-radius: 4px;
+}
+.ui-state-default a,
+.ui-state-default a:link,
+.ui-state-default a:visited {
+color: #337ab7;
+text-decoration: none;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
+
+background-color: #337ab7;
+
+color: white;
+border-radius:4px;
+}
+.ui-state-active a,
+.ui-state-active a:link,
+.ui-state-active a:visited {
+color: #ffffff;
+text-decoration: none;
+}
+
+
+.ui-tabs {
+  position: relative;
+  padding: .2em;
+}
+.ui-tabs .ui-tabs-nav {
+  margin: 0;
+  padding: .2em .2em 0;
+}
+.ui-tabs .ui-tabs-nav li {
+  list-style: none;
+  float: left;
+  position: relative;
+  top: 0;
+  margin: 1px .2em 0 0;
+  padding: 0;
+  white-space: nowrap;
+}
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+  float: left;
+  padding: .5em 1em;
+  text-decoration: none;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+  margin-bottom: 3px;
+  padding-bottom: 1px;
+}
+.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor {
+  cursor: pointer;
+}
+/*.ui-widget-header {
+  border-bottom: 1px solid grey;
+
+}*/
+.ui-tabs .ui-tabs-panel {
+  display: block;
+  border-width: 0;
+  /*padding: 1em 1.4em;*/
+  background: none;
+}
+
+.ui-widget {
+  font-size: 1.2em;
+}
+
+.nav>li>a:focus, .nav>li>a:hover{
+  background-color: #337ABD;
+  color: white;
+}

@@ -1,0 +1,129 @@
+<link rel="stylesheet" href="lib/codemirror.css">
+<link rel="stylesheet" href="theme/mbo.css">
+<link rel="stylesheet" href="addon/display/fullscreen.css">
+<script>
+		<%
+		User.find({admin: true}).exec(function(err, users) {
+				if(err) {
+						console.log("error: " + err);
+				} else {
+						if(users.length == 0) {
+								res.redirect("/user/setup");
+						}
+				}
+		});
+		%>
+		function deleteFolder(id){
+		allFolders[id].remove();
+		};
+		function deleteProblem(id){
+				var classname = "#li-" + id;
+				$(classname).remove();
+		};
+
+		function addProblem(problem){
+		var item = $("<li></li>").attr("id","li-" + problem.id).html(problem.name);
+		var close = $("<a></a>").attr("class","delete").css("margin-left","5px").click(function() {
+						$.post("/problem/delete", {id: problem.id}, function(problem){
+						});
+						deleteProblem(problem.id);
+		});
+				//add problem under containing folder
+				//$("#l-" + problem.folder).append("<li id='li-" + problem.id + "'>" + problem.name + "</li>");
+				$("#l-" + problem.folder).append(item).append(close);
+				//add delete button/method to problem
+		/*
+		$("#li-" + problem.id).append("<a class='delete' style='margin-left: 5px;'><span class='glyphicon glyphicon-remove'></span></a>").click(function(){
+						$.post("/problem/delete", {id: problem.id}, function(problem){
+								alert("successfully deleted");
+						});
+						deleteProblem(problem.id);
+				});
+		*/
+		};
+</script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+<script src="/js/project.js"></script>
+<style>
+
+.console {
+	background-color: #2a2b2b;
+	color: #dddddd;
+	padding: 3px 10px;
+}
+
+#cWrap{
+	margin: auto;
+}
+
+.textConsole {
+	background-color: #edeff0;
+	width: 100%;
+}
+#codemirror {
+	width: 100%;
+}
+
+</style>
+<script src="lib/codemirror.js"></script>
+<script src="../mode/javascript/javascript.js"></script>
+<script src="../addon/selection/active-line.js"></script>
+<script src="../addon/display/fullscreen.js"></script>
+
+<nav style="margin-bottom: 4px" class="navbar navbar-inverse" role="navigation">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<div class="navbar-right">
+				<div class="form-group" style="padding-top:8px">
+				  <select class="form-control" id="fontSize">
+				    <option value="10">10pt</option>
+				    <option value="12">12pt</option>
+				    <option value="14" selected>14pt</option>
+           	<option value="16">16pt</option>
+				    <option value="18">18pt</option>
+           	<option value="20">20pt</option>
+				    <option value="24">24pt</option>
+           	<option value="28">28pt</option>
+				    <option value="32">32pt</option>
+				    <option value="36">36pt</option>
+				    <option value="40">40pt</option>
+				  </select>
+				</div>			  				
+			</div>
+			<div class="navbar-right">
+				<button id="test" type="button" class="btn btn-primary" style="margin-top: 8px; margin-right:5px;">Test Locally</button> 
+			</div>
+		</div><!-- /.navbar-collapse -->
+	</div><!-- /.container-fluid -->
+</nav>
+<div id ="submissionId" style="display:none;"><%= req.query.subId %></div>
+
+<div class="container-fluid " style="padding: 5px">
+	<div id="cWrap">
+		<div id="consoleHeader" class="console">
+		Test Results Console
+        </div>
+		<textarea id="console" class="textConsole" readonly>
+    	</textarea>
+
+    </div>
+    <div class="col-sm-6" style="margin-right:0px;padding-right:2px;">
+		<textarea id="codemirror"></textarea>
+    </div>
+
+
+</div>
+

@@ -1,0 +1,10 @@
+div.mainButtons {
+    display : flex;
+    justify-content: space-evenly;
+}
+
+
+#refreshGather {
+    background-color: green;
+}
+

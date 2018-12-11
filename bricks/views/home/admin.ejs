@@ -1,0 +1,1199 @@
+<link rel="stylesheet" href="lib/codemirror.css">
+<link rel="stylesheet" href="theme/mbo.css">
+<link rel="stylesheet" href="addon/display/fullscreen.css">
+<script>
+		<%
+		User.find({admin: true}).exec(function(err, users) {
+				if(err) {
+						console.log("error: " + err);
+				} else {
+						if(users.length == 0) {
+								res.redirect("/user/setup");
+						}
+				}
+		});
+		%>
+		function deleteFolder(id){
+		allFolders[id].remove();
+		};
+		function deleteProblem(id){
+				var classname = "#li-" + id;
+				$(classname).remove();
+		};
+
+		function addProblem(problem){
+		var item = $("<li></li>").attr("id","li-" + problem.id).html(problem.name);
+		var close = $("<a></a>").attr("class","delete").css("margin-left","5px").click(function() {
+						$.post("/problem/delete", {id: problem.id}, function(problem){
+						});
+						deleteProblem(problem.id);
+		});
+				//add problem under containing folder
+				//$("#l-" + problem.folder).append("<li id='li-" + problem.id + "'>" + problem.name + "</li>");
+				$("#l-" + problem.folder).append(item).append(close);
+				//add delete button/method to problem
+		/*
+		$("#li-" + problem.id).append("<a class='delete' style='margin-left: 5px;'><span class='glyphicon glyphicon-remove'></span></a>").click(function(){
+						$.post("/problem/delete", {id: problem.id}, function(problem){
+								alert("successfully deleted");
+						});
+						deleteProblem(problem.id);
+				});
+		*/
+		};
+</script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="/js/acorn.js"></script>
+
+<script src="/js/admin.js"></script>
+
+<script>
+document.title = "Bricks 4.0 Admin";
+</script>
+<style>
+
+	#sortable { list-style-type: none; margin-top: 4px; padding: 0; width: 100%;}
+	#sortable ul { list-style-type: none; margin-top: 4px; padding: 0; width: 100%;}
+	#sortable ul > li { background: none; border: 0px solid white; margin-left: 5px;}
+
+	.sortableGrip2 { cursor: move; float: left; };
+	.sortableFolder {margin-top: 5px; padding-left: 0px; padding-right: 0px; }
+	.panel-heading {padding-right:5px; }
+	.sortableGrip { cursor: move; float: left; };
+	.panel-collapse {padding:20px; }
+	.panel-collapse p {margin:0 20px; padding:0; }
+
+.spin {
+  -webkit-animation: spin 1s infinite linear;
+  -moz-animation: spin 1s infinite linear;
+  -o-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+     -webkit-transform-origin: 50% 58%;
+         transform-origin:50% 58%;
+         -ms-transform-origin:50% 58%; /* IE 9 */
+}
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* @group Blink */
+
+.blink {
+    -webkit-animation: blink 1s linear infinite;
+    -moz-animation: blink 1s linear infinite;
+    -ms-animation: blink 1s linear infinite;
+    -o-animation: blink 1s linear infinite;
+    animation: blink 1s linear infinite;
+}
+
+@-webkit-keyframes blink {
+    0% { border: 1px solid white; }
+    50% { border: 1px solid white; }
+    50.01% { border: 1px solid red; }
+    100% { border: 1px solid red; }
+}
+
+@-moz-keyframes blink {
+    0% { border: 1px solid white; }
+    50% { border: 1px solid white; }
+    50.01% { border: 1px solid red; }
+    100% { border: 1px solid red; }
+}
+
+@-ms-keyframes blink {
+    0% { border: 1px solid white; }
+    50% { border: 1px solid white; }
+    50.01% { border: 1px solid red; }
+    100% { border: 1px solid red; }
+}
+
+@-o-keyframes blink {
+    0% { border: 1px solid white; }
+    50% { border: 1px solid white; }
+    50.01% { border: 1px solid red; }
+    100% { border: 1px solid red; }
+}
+
+@keyframes blink {
+    0% { border: 1px solid white; }
+    50% { border: 1px solid white; }
+    50.01% { border: 1px solid red; }
+    100% { border: 1px solid red; }
+}
+
+/* @end */
+
+
+body {
+	padding-bottom: 20px;
+
+}
+.navigationPanel {
+	padding: 0px;
+	border:none;
+}
+
+.folderButtonStyle {
+  color:black;
+  background:oldlace;
+  padding:5px;
+  font:arial;
+  font-size:larger;
+  font-weight:bold;
+}
+.folderButtonStyle:hover {
+  background:powderblue;
+}
+
+form > button {
+	margin-top: 10px;
+}
+.navbar-default {
+		margin-top: 20px;
+}
+#folderBar {
+	padding: 0px;
+}
+#folderBar > div {
+	margin-right: 10px;
+}
+.alert {
+		margin-top: 10px;
+		margin-bottom: 0;
+}
+.pointbreakdown {
+	float:right;
+	width:200px;
+	margin-left:5px;
+	padding:5px;
+}
+#viewStudentsTable {
+	margin-top: 20px;
+	text-align: center;
+}
+
+.attemptProblem td {
+	padding-left:30px
+}
+.attemptProblem td:last-child {
+	padding-left:3px
+}
+.left {
+	float:left;
+	width: 21.5%;
+}
+.problem-name-first {
+	width:35%;
+}
+.submission-name-first {
+width:31.5%;
+}
+.left-submission {
+	float:left;
+	width: 22.5%;
+}
+.style-submission {
+	margin-right:23.5%
+}
+.scrollableAccordian {
+ 	 height:964px;
+   overflow: scroll;
+}
+
+ul {
+	list-style-type: none;
+}
+
+#visualization {
+	width:100%;
+}
+.visualize-row {
+	width:100%;
+	height:10px;
+	margin:2px 0;
+}
+#matrixBody {
+}
+.matrixSquare {
+	height:50px;
+	width: 50px;
+	float:left;
+	margin: 1px;
+	padding-left: 2px;
+	padding-right: 2px;
+	text-overflow: clip;
+	white-space: nowrap;
+    overflow: hidden;
+    transition:height 0.2s; /* Animation time */
+    -webkit-transition:height 0.2s; /* For Safari */
+    clear:none;
+	vertical-align: top;
+	line-height: 0px;
+}
+
+.matrixSquareHover {
+	margin: 0px;
+	width:auto;
+	height:auto;
+	line-height: 250%;
+	visibility: hidden;
+}
+
+.matrixSquare:hover {
+	min-width: 50px;
+	width: auto;
+}
+
+#refreshData {
+	float: right;
+	margin-top: -6px;
+}
+
+.probStudentSubmissionTableTD {
+	width: 15%;
+	text-align: center;
+}
+#pointbreakdownSubmission {
+	border: 2px solid gray;
+	width:190px;
+	margin-left:5px;
+	padding:8px;
+	margin-bottom: 7px;
+	float:right;
+}
+
+#feedbackRequestedDiv, #feedbackDisplayDiv, #feedbackSubmitDiv {
+	margin: 10px;
+	margin-left:0px;
+	margin-right:0px;
+	margin-top: 3px;
+}
+
+.console {
+	background-color: #2a2b2b;
+	color: #dddddd;
+	padding: 3px 10px;
+}
+.textConsole {
+	width: 100%;
+	background-color: #edeff0;
+}
+
+.ISLP {
+	background-color: #F7F7F7;
+}
+
+.folderCollapse p {
+	margin:0px;
+	padding-left: 5px;
+}
+
+
+
+</style>
+<script src="lib/codemirror.js"></script>
+<script src="../mode/javascript/javascript.js"></script>
+<script src="../addon/selection/active-line.js"></script>
+<script src="../addon/display/fullscreen.js"></script>
+
+<% if (req.isAuthenticated() && req.user.admin) {%>
+
+<nav style="margin-bottom: 0" class="navbar navbar-inverse" role="navigation">
+  <div class="container-fluid">
+
+	  <div class="navbar-header">
+	    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	      <span class="sr-only">Toggle navigation</span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+	    </button>
+	  </div>
+
+	  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <a class="navbar-brand homeLink" href="javascript:history.go(0)">
+         <font color=oldlace><b>Admin</b></font>
+      </a>
+	    <ul class="nav navbar-nav">
+			  <li id="matrixLink">
+          <a class="navbar-brand matrixLink" href="#matrix" data-toggle="pill">
+             <b>Matrix</b></a>
+        </li>
+				<li><a class="navbar-brand editLink" href="#edit" data-toggle="pill">
+              <b>Edit</b></a></li>
+				<li><a class="navbar-brand addLink" href="#addquestion" data-toggle="pill">
+              <b>Add</b></a></li>
+				<li id='feedbackNav'></li>
+				<li id='feedbackNavC'></li>
+				<li id="studentsLink" >
+          <a class="navbar-brand " href="#students" data-toggle="pill">
+             <b>Students</b></a>
+        </li>
+				<li><a class="navbar-brand " href="#admin" data-toggle="pill">
+             <b>Admins</b></a></li>
+				<li><a class="navbar-brand " href="#settings" data-toggle="pill">
+             <b>Settings</b></a></li>
+				<li><a class="navbar-brand" href="#help" data-toggle="pill">
+              <b>Help</b></a></li>
+	    </ul>
+
+	    <div class="navbar-right">
+				<p class="navbar-text"><%= req.user.displayName %></p>
+				<p class="hidden" id="userOnyen"><%= req.user.username %></p>
+
+				<form class="navbar-form navbar-right">
+					<a href="/login/logout" id="logout" class="btn btn-default">Logout</a>
+				</form>
+			</div>
+	  </div>
+
+
+	</div><!-- /.container-fluid -->
+</nav>
+
+<!-- Modal -->
+	<div class="modal fade" id="shareSubmissionModal" role="dialog">
+	    <div class="modal-dialog">
+
+	      <!-- Modal content-->
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Share Submission?</h4>
+	        </div>
+	        <div class="modal-body">
+	        	<b><span id="subModal"></span></b><br /><br />
+				<textarea id="modalCodemirror"></textarea>
+	        </div>
+	        <div class="modal-footer">
+	          <span id="projectSubmissionButton"></span>
+	          <span id="dimissShareButton"></span>
+	          <button type="button" class="btn btn-default" data-dismiss="modal">Hold</button>
+	        </div>
+	      </div>
+
+	    </div>
+	</div>
+
+
+<div class="container-fluid " style="padding-top: 4px">
+
+
+
+
+
+	<!-- BODY -->
+	<div class="tab-content " id="mainBody">
+
+		<!-- MATRIX SECTION -->
+
+		<div class="tab-pane active" id="matrix">
+
+			<!-- SIDE BAR -->
+			<div class=" navigationPanel panel panel-default col-md-3 ">
+				<div id="moveMatrix">
+					<div id="moveMe">
+						<button type="button" class="btn btn-default folderButtonStyle"
+              id="sortFolderButton" >Edit Folders</button>
+						<div class="panel-group scrollableAccordian" id="navigableFolders"></div>
+						<div class="panel-group" id="sortableFolders"></div>
+					</div>
+				</div>
+			</div>
+			<!-- END SIDE BAR -->
+
+			<div class="col-md-9">
+				<div class="alert alert-danger hidden problemDeleted">
+					Deleting Problem... <span class="glyphicon glyphicon-refresh spin" />
+				</div>
+
+				<!-- DISPLAY QUESTION SECTION -->
+				<div class="panel panel-default ">
+
+					<!-- DISPLAY QUESTION HEADING -->
+					<div class="panel-heading">
+					  <h4 class="panel-title" >
+						  <a data-toggle="collapse" data-parent="#accordion" aria-expanded="true"
+                 href="#displayQuestionCollapse" id="problemDisplayName">
+                  <font size=+1 color=blue><b>Choose a Problem</b></font></a>
+						</h4>
+					</div>
+
+					<!-- DISPLAY QUESTION BODY -->
+					<div class="collapse" id="displayQuestionCollapse">
+						<div class="panel-body">
+							<div class="pointbreakdown">
+								<div id="pointbreakdown" class=" hidden alert alert-info" >
+									<b>Point Breakdown:</b><br/>
+									Functionality: <span id="availablePtCorrect"></span>
+									<br />
+									Style: <span id="availablePtStyle"></span>
+									<br />
+								</div>
+								<div id="submissionLimitDisplay" class=" hidden alert alert-danger" >
+									<b>(hey!)Sub Limit: </b><span id="maxSubmissionLimit"></span>
+								</div>
+							</div>
+							<div id="problemDisplayBody" >
+								Select a problem from the left to work with.
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- DISPLAY QUESTION SECTION END -->
+
+				<!-- MATRIX SECTION -->
+				<div class="panel panel-default ">
+
+					<!-- MATRIX HEADING -->
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#problemMatrix" aria-expanded="true" >Matrix</a>
+							<button style="float:right;margin-top:-6px;" class="btn btn-primary btn-sm" id="clearShareRequests" data-toggle="tooltip" data-placement="top" title="Dimiss all Share Requests">
+								<span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+							</button>
+
+							<select id="studentListRefresh" style="float:right;width:auto;margin:0px;margin-top:-8px;" class="form-control">
+								<option value="0">Manual</option>
+								<option value="10">10 seconds</option>
+								<option value="20">20 seconds</option>
+								<option value="60">1 minute</option>
+								<option value="180">3 minutes</option>
+							</select>
+
+						</h4>
+					</div>
+
+					<!-- MATRIX BODY -->
+					<div class="panel-collapse " id="problemMatrix">
+						<div class="panel-body" style="padding:2px">
+							<div id="matrixBody">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- MATRIX SECTION END -->
+
+				<!-- STUDENT PROGRESS SECTION -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#allStudents1ProblemTableCollapse" aria-expanded="true" >Student Attempts</a>
+							<span id="answeredCorrect" class="label label-primary" data-toggle="tooltip" data-placement="top" title="Percentage of responders that have earned full points">0%</span><span id="function" class="label label-info" data-toggle="tooltip" data-placement="top" title="Students with full correct points">0%</span><span id="style" class="label label-success" data-toggle="tooltip" data-placement="top" title="Students with full style points">0%</span>
+							<button class="btn btn-primary btn-sm" id="refreshData" data-toggle="tooltip" data-placement="top" title="This panel does not update with the matrix above.   Refresh to fill progress bar and table with most recent data.">Refresh</button>
+						</h4>
+					</div>
+					<div class="panel-collapse collapse" id="allStudents1ProblemTableCollapse">
+						<!-- PROGRESS BAR SECTION -->
+						<div class="progress" style="margin-bottom:0px;">
+							<div class="progress-bar progress-bar-success" style="width: 0%" id="pbp-green" data-toggle="tooltip" data-placement="top" title="Students who earned full points">
+								<span class="sr-only">35% Complete (success)</span>
+							</div>
+							<div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 0%" id="pbp-yellow" data-toggle="tooltip" data-placement="top" title="Students who submitted but did not earn full points">
+								<span class="sr-only">20% Complete (warning)</span>
+							</div>
+							<div class="progress-bar progress-bar-danger" style="width: 0%" id="pbp-red">
+								<span class="sr-only">10% Complete (danger)</span>
+							</div>
+						</div>
+						<!-- PROGRESS BAR SECTION END -->
+						<div id="allStudents1ProblemTable">
+						</div>
+					</div>
+				</div>
+				<!-- STUDENT PROGRESS SECTION ENDS -->
+			</div>
+
+		</div>
+		<!-- MATRIX SECTION ENDS -->
+
+		<!-- EDIT SECTION -->
+		<div class="tab-pane " id="edit">
+
+			<!-- SIDE BAR -->
+			<div class="navigationPanel panel panel-default col-md-3 ">
+				<div id="moveEdit">
+				</div>
+			</div>
+			<!-- END SIDE BAR -->
+
+			<div class="col-md-9">
+				<div class="alert alert-danger hidden problemDeleted">
+					Deleting Problem... <span class="glyphicon glyphicon-refresh spin" />
+				</div>
+				<!-- EDIT QUESTION SECTION -->
+				<div class="panel panel-default" id="editQuestionpanel">
+
+					<!-- EDIT QUESTION HEADING -->
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion"
+                 href="#editQuestionCollapse" aria-expanded="true" >
+                 <font color=blue size=+1><b>Edit existing Problem</b></font></a>
+						</h4>
+					</div>
+
+					<!-- EDIT QUESTION BODY -->
+					<div class="" id="editQuestionCollapse">
+						<div class="panel-body">
+							<p id="editPlaceholder">Select a problem from the left to edit it</p>
+							<form id="editForm" class="form hidden">
+								<div class="row">
+									<div class="form-group">
+										<div class="col-md-3">
+											<label class="control-label" for="editType">Type</label>
+											<select id="editType" name="editType" class="form-control">
+												<option value="twit">twit</option>
+												<option value="diy">diy</option>
+												<option value="wall">wall</option>
+												<option value="exam">exam</option>
+											</select>
+										</div>
+										<div class="col-md-3">
+											<label class="control-label" for="editPhase">Phase</label>
+											<select id="editPhase" name="editPhase" class="form-control">
+												<option value="0">Past</option>
+												<option value="1">Present</option>
+												<option value="2">Future</option>
+											</select>
+										</div>
+										<div class="col-md-3">
+											<label class="control-label">Function Points</label>
+											<input id="editCorrectPoints" class="form-control">
+										</div>
+										<div class="col-md-3">
+											<label class="control-label">Style Points</label>
+											<input id="editStylePoints" class="form-control">
+										</div>
+										<div class="col-md-3">
+											<label class="control-label" for="editProblemLanguage">Language</label>
+											<select name="editLanguage" id="editLanguageDropdown" class="form-control">
+												<option value="javascript">JavaScript</option>
+												<option value="java">Java</option>
+												<option value="ML">ML</option>
+												<option value="text">Text</option>
+												<option value="other">Other</option>
+											</select>
+										</div>
+										<div class="col-md-3">
+											<label class="control-label" for="editMode">Mode</label>
+											<select name="editMode" id="editModeDropdown" class="form-control">
+												<option value="true">Test</option>
+												<option value="false">Live</option>
+											</select>
+										</div>
+										<div class="col-md-3">
+											<label class="control-label" for="editMaxSubmissions">Sub Limit</label>
+									     	<input type="checkbox" id="editMaxSubmissions">
+											<input disabled id="editSubmissionLimit" class="form-control">
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="col-md-6">
+											<label class="control-label" for="editProblemName">Name</label>
+											<input id="editProblemName" name="editName" type="text" class="form-control"></input>
+										</div>
+										<div class="col-md-6">
+											<label name="editFolder" class="control-label" for="folder">Folder</label>
+											<select id="editFolderDropdown" class="form-control">  </select>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<div class="col-md-12">
+											<label class="control-label" for="editVideoLink">Video Link (URL)</label>
+											<input id="editVideoURL" type="text" class="form-control">
+										</div>
+								  </div>
+
+
+								</div>
+
+								<label class="control-label" for="editDescription">Description</label>
+								<textarea name="editDescription" id="editDescription" class="form-control"></textarea>
+								<label class="control-label" for="editOnSubmit">Function to run on submission</label>
+								<textarea name="editOnSubmit" id="editOnSubmit" class="form-control"
+										 style="font-family:Consolas, monospace"></textarea>
+								<div id="editProblemError"></div>
+
+								<button class="btn btn-success form-control" id="editProblem">Update Problem</button>
+
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- EDIT QUESTION SECTION END -->
+				<!--
+				<button class="btn btn-danger form-control hidden" id="deleteProblem">Delete Problem</button>
+				-->
+			</div>
+
+		</div>
+		<!-- EDIT SECTION ENDS -->
+
+
+		<!-- ADD QUESTION SECTION -->
+		<div class=" tab-pane " id="addquestion">
+			<div class=" navigationPanel panel panel-default col-md-3 ">
+				<div id="moveAdd">
+				</div>
+			</div>
+			<div class="col-md-9">
+				<div  class="panel panel-danger tab-pane " id="addquestion" style="background-color:#F3F4F3;">
+					<div class="panel-heading">
+						<font size=+1><b>Add a New Problem</b></font>
+					</div>
+					<div class="panel-body">
+						<form id="addProblemForm" class="form">
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-3">
+										<label class="control-label" for="type">Type</label>
+										<select  id="type" class="form-control">
+											<option value="twit">twit</option>
+											<option value="diy">diy</option>
+											<option value="wall">wall</option>
+											<option value="exam">exam</option>
+										</select>
+									</div>
+									<div class="col-md-3">
+										<label class="control-label" for="phase">Phase</label>
+										<select  id="phase" class="form-control">
+											<option value="2">Future</option>
+											<option value="1">Present</option>
+											<option value="0">Past</option>
+										</select>
+									</div>
+									<div class="col-md-3">
+										<label class="control-label">Function Points</label>
+										<input id="correctPoints" value=1 class="form-control">
+									</div>
+									<div class="col-md-3">
+										<label class="control-label">Style Points</label>
+										<input id="stylePoints" value=1 class="form-control">
+									</div>
+									<div class="col-md-3">
+										<label class="control-label" for="language">Language</label>
+										<select id="languageDropdown" class="form-control">
+											<option value="javascript">JavaScript</option>
+											<option value="java">Java</option>
+											<option value="ML">ML</option>
+											<option value="other">Other</option>
+											<option value="text">Text</option>
+										</select>
+									</div>
+									<div class="col-md-3">
+										<label class="control-label" for="mode">Mode</label>
+										<select name="mode" id="modeDropdown" class="form-control">
+											<option value="true">Test</option>
+											<option value="false">Live</option>
+										</select>
+									</div>
+									<div class="col-md-3">
+										<label class="control-label" for="maxSubmissions">Sub Limit</label>
+								     	<input type="checkbox" id="maxSubmissions">
+										<input disabled id="submissionLimit" class="form-control">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-6">
+										<label class="control-label" for="name">Name</label>
+										<input  id="problemName" type="text" class="form-control">
+									</div>
+									<div class="col-md-6">
+										<label class="control-label" for="folder">Folder</label>
+										<select id="folderDropdown" class="form-control"> </select>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-12">
+										<label class="control-label" for="videoLink">Video Link (URL)</label>
+										<input id="videoURL" type="text" class="form-control">
+									</div>
+							  </div>
+              </div>
+
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-12">
+										<label class="control-label" for="description">Description</label>
+										<textarea id="description" class="form-control"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-12">
+										<label class="control-label" for="onSubmit">Function to run on submission</label>
+										<textarea id="onSubmit" class="form-control"
+											 style="font-family:Consolas, monospace">
+										</textarea>
+									</div>
+								</div>
+							</div>
+							<button class="btn btn-success form-control" id="addProblem">Add Problem</button>
+						</form>
+					</div>
+				</div>
+				<div id="newProblemError"></div>
+			</div>
+		</div>
+		<!-- ADD QUESTION SECTION ENDS -->
+
+		<!-- SUBMISSION SECTION -->
+		<div class="tab-pane" id="submission">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#submissionCollapse"
+               id="submissionTitle">
+							Collapsible
+						</a>
+					</h4>
+				</div>
+				<div id="submissionCollapse" class="panel-collapse collapse in submissionCollapse">
+					<div class="panel-body">
+						<div id="pointbreakdownSubmission">
+			  		  Functionality
+			  			<a id="editSubmissionPtsF" class="pull-right" >
+      					<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+							</a>
+              <span id="ScorrectCheck" class="pull-right"></span>
+              <span class="badge pull-right">
+                <span id="SearnedPtCorrect">0</span>/<span id="SavailablePtCorrect"></span>
+							</span>
+
+
+			  				<br />
+			  				Style
+			  				<a id="editSubmissionPtsS" class="pull-right" >
+      							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+							</a><span id="SstyleCheck" class="pull-right"></span><span class="badge pull-right"><span id="SearnedPtStyle">0</span>/<span id="SavailablePtStyle"></span><span><br />
+		  				</div>
+						Created By: <span id="submissionCreatedBy"></span><br />
+						Problem: <span id="submissionProblem"></span><br />
+						Created At: <span id="submissionCreatedAt"></span><br /><br />
+						<div id="submissionProject"></div>
+
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6" style="padding-right:0px;">
+
+				  <!-- Nav tabs -->
+				  <ul class="nav nav-tabs" role="tablist" id="submissionTabMenu">
+				    <li id="submissionTabSubmission" role="presentation" class="active"><a href="#submissionTab" aria-controls="submissionTab" role="tab" data-toggle="tab">Submission</a></li>
+				    <li id="submissionTabFeedback" role="presentation"><a href="#feedbackTab" aria-controls="feedbackTab" role="tab" data-toggle="tab">
+             <b>Feedback</b></a></li>
+				  </ul>
+
+				  <!-- Tab panes -->
+				  <div class="tab-content">
+				    <div role="tabpanel" class="tab-pane active" id="submissionTab">
+						<div id="feedbackRequestAlertSubTab" class="alert alert-danger " style="margin-left:0px;margin-right:0px;" >
+							<span class="feedbackRequestTime"></span>
+							<div class="fbRequestMsg" style="clear:both;margin-top:10px;"></div>
+						</div>
+						<div class="console" style="margin-top:10px;">
+						Test Results Console
+				        </div>
+						<textarea id="fbConsole" class="textConsole" readonly>
+				    	</textarea>
+						<div id="readOnlySubmission">
+							<textarea id="codemirror"></textarea>
+						</div>
+						<div id="feedbackSubmitDiv">
+							<textarea name="fbCodemirror" id="fbCodemirror"></textarea>
+
+							<textarea name="fbResponseMessage" id="fbResponseMessage" class="form-control" placeholder="Enter message for student here..."></textarea>
+
+							<button id="submitFeedbackButton" class="btn btn-primary form-control" >Submit Feedback</button>
+						</div>
+				    </div>
+				    <div role="tabpanel" class="tab-pane" id="feedbackTab">
+						<div id="feedbackRequestAlertFbTab" class="alert alert-danger " style="margin-left:0px;margin-right:0px;" >
+							<span class="feedbackRequestTime"></span>
+							<div class="fbRequestMsg" style="clear:both;margin-top:10px;"></div>
+						</div>
+						<div class="alert alert-success" style="margin-bottom: 10px">
+							<span id="feedbackResponseTime"></span>
+							<div id="fbResponseMsg" style="clear:both;margin-top:10px;"></div>
+						</div>
+						<textarea id="fbCodemirrorReadOnly"></textarea>
+
+				    </div>
+				  </div>
+				</div>
+				<div class="col-sm-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#accordion" href="#relatedSubmissionCollapse" id="submissionTitle">
+									Related Submissions
+								</a>
+							</h4>
+						</div>
+						<div id="relatedSubmissionCollapse" class="panel-collapse collapse in submissionCollapse">
+							<table class="table" style='margin-bottom:0px;'>
+							<thead><tr id="relatedSubmissionHead"></tr>
+							</thead>
+							<tbody id="relatedSubmissions"> </tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- SUBMISSION SECTION ENDS -->
+
+		<!-- PROGRESS SECTION
+		<div class="tab-pane" id="progress">
+			<h1>Progress</h1>
+			<div id="visualization"></div>
+		</div>
+		 PROGRESS SECTION ENDS -->
+
+		<!-- ADMIN SECTION -->
+		<div class="tab-pane" id="admin">
+			<div class="col-md-5">
+				<div class="panel panel-default ">
+					<div class="panel-heading">
+            <font size=+1 color=blue><b>Manage admins</b></font></div>
+
+					 <ul id="admins" class="list-group"></ul>
+
+					 <div class="panel-body">
+						 <div class="input-group">
+							<input type="text" id="newAdmin" class="form-control" placeholder="Type username..."></input>
+							<span class="input-group-btn">
+								 <button type="submit" id="newAdminBtn" class="btn btn-default"><span class="glyphicon glyphicon-plus" style="color:green;"></span></button>
+							</span>
+						 </div>
+						 <div id="newAdminError"></div>
+					 </div>
+				</div>
+				<div class="alert alert-danger hidden" id="namesHaveChanged">
+					Please refresh page to observe name changes.
+				</div>
+			</div>
+		</div>
+		<!-- ADMIN SECTION ENDS -->
+
+		<!-- LIST STUDENTS SECTION -->
+		<div class="tab-pane" id="students">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title"><font size=+1 color=blue><b>Students</b></font>
+						<form class="form-inline pull-right">
+							<div class="form-group">
+								<input type="text" class="form-control" id="onyen" placeholder="Enter onyen">
+								<!--<button href="#individualStudent" type="button" class="btn btn-primary"  data-toggle='pill' id="onyenSearchButton">Submit</button>-->
+								<a href="#individualStudent" data-toggle="pill" class="btn btn-info" role="button" id="onyenSearchButton">Search</a>
+								<a class="btn btn-primary" id="refreshStudentListScores">Refresh</a>
+								<a class="btn btn-default" id="exportCSV">CSV</a>
+							</div>
+						</form>
+					</h4>
+				</div>
+
+				<div id="viewStudentsList">
+					<div class="panel-body">
+						Loading students...
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- LIST STUDENTS SECTION ENDS -->
+
+		<!-- INDIVIDUAL STUDENT SECTION -->
+		<div class="tab-pane" id="individualStudent">
+			<h1 id="individualName" style="margin-left:15px"></h1>
+			<div id="individualFeedback" class="col-md-3">
+				<div id="deleteUser" ></div>
+				<div class="alert alert-info"><b>All Time Code shares:</b>  <span id='shareRequestCount'>0</span></div>
+				<div class="alert alert-info"><b>All Time Feedback requests:</b>  <span id='feedbackRequestCount'>0</span></div>
+				<h4 id='feedbackHeader'>Pending Requests:</h4>
+				<div id="feedbackConversation"></div>
+			</div>
+
+			<div class="col-md-9">
+				<!-- PROGRESS BAR-->
+				<div style="clear:both;">
+
+					<button type="button" class="btn btn-primary" disabled="disabled" id="studentRefresh" style="float:right;font-size:12pt;padding:4px;"  data-toggle="tooltip" data-placement="top" title="Reload from database"><span class='glyphicon glyphicon-refresh' id="studentRefreshGlyph"></button>
+
+					<button type="button" class="btn btn-primary" id="studentScoreButton" style="font-size:12pt;float:right;padding:4px;" data-toggle="tooltip" data-placement="top" title="Recompute Score"></button>
+
+					<div id="individualProgessBar" class="hidden" style="margin-top:0px;"></div>
+
+				</div>
+
+				<!--SUBMISSION LIST-->
+				<div class="panel-group" id="individualSubmissionList" ></div>
+			</div>
+
+		</div>
+		<!-- INDIVIDUAL STUDENT SECTION ENDS -->
+
+		<!-- HELP SECTION -->
+		<div class="tab-pane" id="help">
+			<h1><font color=blue><b>Help with Bricks Admin</b></font></h1>
+      <font size=+1 color=firebrick>
+			<b>Looking for help? You've come to the right place!</b>
+      </font>
+			<h3><font color=navy>Matrix: Viewing Student Progress</font></h3>
+			Navigate between problems with the menu on the left.
+			<br /><br />
+			The matrix panel shows a grid with one box for each student.  Red boxes mean the student has not attempted the problem; yellow means the student has attempted but not earned full points and green shows student has earned full points.  Hovering over a box shows menu options for that student that will always include a link to the student's profile and may include any Feedback or Share requests, if applicable. Boxes with these pending requests will blink. (More info on these requests below.)  In the corner of this panel there is a button to dismiss all share requests as well as a dropdown that controls the automatic refresh setting of the matrix.  The matrix will search for updates on the intreval specified by the dropdown.
+			<br /><br />
+			The Student Attempts panel must be refreshed manually with its "Refresh" button in the corner (this will also refresh the matrix).  Hover over colored percentages for descriptions of what they mean.  The table summarizes each user's best score for that problem as well as their number of attempts.  Click on student's name for full breakdown of submissions. Click the person icon to see their profile.
+
+			<h3><font color=navy>Edit & Add: Updating Problems and Folders</font></h3>
+			Select a problem from the menu on the left to edit it.
+			<br />
+			<b>Phase:</b> Past problems will be indicated as such in the student view and only give half credit.  Present problems will show in student menu with full credit.  Future problems will never show in the student menu.<br />
+			<b>Language:</b> Only Javascript problems will be automatically graded.  Other problem types will be accepted with grades of 0 that can be manually changed by an admin.<br />
+			<b>Mode:</b> Problems in Test Mode will only be seen by admins on the student view. They give accept submissions and give points like normal problems but their point value is not considered in the tally of total avaliable points.  To temporarily hide Test Mode problems from your student view as an admin (to avoid confusing students if you are sharing your screen), click your username in the student view.  It's actually a secret toggle button! Note: the toggle will reset to showing Test Mode problems when the page is refreshed or reloaded.
+			<br />
+			<b>Submission Limit:</b> This imposes a limit on the number of submission accepted. Problems with limits are indicated as such on the student view.
+			<br /><br />
+			To base a new problem off an old problem, select the old problem from the left menu to preload its characteristics into the add problem form.
+			<br /><br />
+			To delete a problem, add a folder or edit the order of existing problems and folders click the "Edit Folders" button above the left menu.  Click "done" when you're finished to return to the navigable problems menu.  Deleting problems also deletes any submissions it had. Be sure to recalculate scores of any students who may have earned points in any deleted submissions (see below).
+
+			<h3><font color=navy>Feedback & Archive</font></h3>
+			Students can request feedback on submissions. Feedback can be in the form of a message or alterations to the submission code.  Students with unread feedback will see an "Unread Feedback" button at the top of Bricks the next time they load the page until they open new feedback. The button's modal will link to all problems will unread Feedback. A blinking "View" button in the Past Submissions panel will open a new page showing both their request message and the admin's response message as well as a side-by-side comparison of their code and the admin's altered code.  Old feedback can always be viewed but will no longer blink nor be seen in the Unread Feedback list.
+			<br /><br />
+			A list of all pending feedback requests can be seen on the Feedback tab. Feedback can be answered from this page or from a submission page (navigated to from either the problem or student profile). Pending feedback requests can also be seen in the matrix of the submission's problem as well as the student's profile. Feedback can be given from a submission page without a request.
+			<br /><br />
+			The Archive tab displays all feedback ever given.
+
+			<h3><font color=navy>Sharing</font></h3>
+			Students can enable sharing for a problem, ie give their permission for the professor to show their submission code to the class. This is done from the "Past submissions" panel of a problem in the student view. If a student has enabled sharing, an admin may project their code in a new window for teaching purposes.  A new share request will cause a student's box to blink on the matrix view of a particular problem.  Clicking on the share request icon, a modal will provide the admin with three options. "Project" opens a new window with the submission code in an editable box that can be ran locally. "Dismiss" will close the modal and get rid of the icon and blinking in the matrix. "Hold" will close the modal but not end the blinking. Once sharing is enabled, a submission can always be projected from its submission page even if it is dismissed. A button in the corner of the matrix panel dismisses all requests in one click.
+
+			<h3><font color=navy>Students</font></h3>
+			The "Students" tab on the top navbar will take you to a comprehensive list of students, which is searchable by onyen.
+			<br /><br />
+			On a student profile there is a general progress bar, to the right of which are two buttons.  Clicking the first, which shows their current score, recalculates the student's score by analyzing all of their submissions. This may be used to ensure the accuracy of a student's score- for instance if you deleted a problem for which the user had earned points.  The second reloads existing data from the database (for instance to fetch any new submissions).
+			<br /><br />
+			Colored folders expand to show student's submissions for each problem, including any pending feedback requests. Click a submission's timestamp to view more details.
+			<br /><br />
+			Below the feedback and share request stats, pending feedback request summaries can be seen from the left side, if applicable.
+			<br /><br />
+			Deleting a user from this page will also delete all their submissions.  It requires a page refresh for the change to take effect.
+
+			<h3><font color=navy>Submissions</font></h3>
+			Submission scores can be edited in the upper right hand by clicking the pencil.
+			<br /><br />
+			If student has given permission by enabling sharing, an admin may project the code into a new window for teaching purposes with the "Project code" button.  If not, this button will be disabled ("requires student permission").
+			<br /><br />
+			In the bottom left where the code box is, admins can see feedback requests messages (if applicable) and submit feedback for the student's code. Or, if a submission already has feedback, it will be seen in this section.
+
+
+			<h3><font color=navy>Settings</font></h3>
+			Gets rid of Feedback and Sharing from admin and student interfaces. Does not delete the related data.
+
+			<h3><font color=navy>Grading Student Submissions</font></h3>
+			Below is a template for generating scores for students.  The functions fail.f() and fail.s() deduct functionality and style points (respectively).  They take 2 parameters: the message to append to the console and an optional portion of points to deduct (a fraction between 0 and 1 to be multiplied with the available number of points).  Leaving the message blank ("") will deduct all available points without appending a message.  When done checking for errors, pass.f and pass.s must be called.  The pass function parameter is the message to be appended for full points and can be left blank ("") to append no message.
+
+			<pre>
+// I/O pairs for functional behavior
+var soln_inputs = [ [ ] ];
+var soln_outputs = [ ["Hello world !!"] ];
+
+// callbacks to do grading
+function totalChecker (err, user_outputs, truVec ) {
+  var ff = false;
+
+  // check functional correctness
+  if (err) { fail.f("There was an error is your code: " + err.msg); }
+  else {
+     for(var i=0; i&lt;truVec.length; i++) {
+        if (!truVec[i]) { fail.f("incorrect output"); ff = true; }
+     }
+  }
+
+  // check style
+  if ((style.nDV + style.nUDV + style.nVU) != 0) { fail.s("dont use variables",.4); }
+  if (!style.isJOTFC) { fail.s("make a single output, nothing else",.3); }
+  if (!style.hasOTAOL) { fail.s("make one call to alert on a string literal",.3); }
+
+  // finalize and award points if any
+  pass.f("passed functional correctness");
+  pass.s("passed style correctness");
+}
+
+// make it so
+batch.exec ( code, soln_inputs, soln_outputs, totalChecker);
+			</pre>
+
+
+		</div>
+		<!-- HELP SECTION ENDS -->
+
+		<!-- SETTINGS SECTION -->
+		<div class="tab-pane" id="settings">
+			<h2><font color=blue><b>Settings</b></font></h2><br/>
+			<div id="feedbackToggle" ></div>
+      <br/>
+			<div id="shareToggle" ></div>
+
+		</div>
+		<!-- SETTINGS SECTION ENDS -->
+
+		<!-- FEEDBACK SECTION -->
+		<div class="tab-pane" id="feedback">
+			<div class="col-md-5" style="padding:0px;">
+				<table class="table" style='margin-bottom:0px;'>
+				<thead>
+				<tr><th>Submission</th>  <th>User</th>  <th>Problem</th>
+				<th>Func</th> <th>Style</td>
+				</tr>
+				</thead>
+				<tbody id="feedbackDash"> </tbody>
+				</table>
+			</div>
+
+			<div id="fbDashBody" class="hidden col-md-7">
+				<div id="instructions" class='panel panel-default' style="margin-bottom:3px">
+		      		<div class='panel-heading'>
+						<h3 class='panel-title'><a data-toggle="collapse" data-parent="#accordion" href="#feedbackCollapse" aria-expanded="true" ><span id="desc-title">Problem</span></a></h3>
+		      		</div>
+		      		<div id="feedbackCollapse" class="collapse">
+						<div class='panel-body'>
+			  				<div id="desc-body" >
+		 						Description
+							</div>
+			    		</div>
+			    	</div>
+		    	</div>
+
+				<div class="alert alert-warning" style="margin-bottom: 6px;">
+					<span id="fbDashRequestTime"></span><span id="fbDashRequester"></span>
+					<div id="fbDashRequestMsg" style="margin-top:10px;clear:both;">Student Request Message</div>
+				</div>
+				<div >
+					<div class="console">
+					Test Results Console
+			        </div>
+					<textarea id="fbDashConsole" class="textConsole" readonly>
+			    	</textarea>
+
+					<textarea id="fbDashCodemirror"></textarea>
+					<textarea name="fbResponseMessage" id="fbResponseMessageDash" class="form-control" placeholder="Enter message for student here..."></textarea>
+
+					<button id="submitFeedbackButtonDash" class="btn btn-primary form-control" >Submit Feedback</button>
+				</div>
+			</div>
+
+			<div class='alert alert-success hidden col-md-7' id='fbDashSuccess' role='alert'>Feedback Submitted!</div>
+
+		</div>
+		<!-- FEEDBACK SECTION ENDS -->
+
+		<!-- COMPLETED FEEDBACK SECTION -->
+		<div class="tab-pane" id="completedFeedback">
+			<div class="col-md-5" style="padding:0px;overflow: scroll;" id="archiveFeedbackList">
+				<table class="table" style="margin-bottom:0px; ">
+				<thead>
+				<tr><th  title="Date of submission creation" id="fbArchiveSubmissionTH">Submitted</th>  <th>Admin</th> <th>User</th>  <th>Problem</th>
+				<th>Func</th> <th>Style</td>
+				</tr>
+				</thead>
+				<tbody id="feedbackDashC" > </tbody>
+				</table>
+			</div>
+
+			<div id="fbDashBodyC" class="hidden col-md-7">
+				<div class='panel panel-default ' style="margin-bottom:3px">
+		      		<div class='panel-heading'>
+						<h3 class='panel-title'><a data-toggle="collapse" data-parent="#accordion" href="#completedFeedbackCollapse" aria-expanded="true" ><span id="desc-titleC">Problem</span></a></h3>
+		      		</div>
+		      		<div id="completedFeedbackCollapse" class="collapse">
+						<div class='panel-body'>
+			  				<div id="desc-bodyC" >
+		 						Description
+							</div>
+			    		</div>
+			    	</div>
+		    	</div>
+
+				<div id="completedFeedbackRequest" class="alert alert-danger " style="margin-left:0px;margin-right:0px;" >
+					<span id="feedbackRequestTimeC"></span>
+					<div id="fbRequestMsgC" style="clear:both;margin-top:10px;"></div>
+				</div>
+				<div class="alert alert-success" style="margin-bottom: 10px">
+					<span id="feedbackResponseTimeC"></span>
+					<div id="fbResponseMsgC" style="clear:both;margin-top:10px;"></div>
+				</div>
+				<div class="console">
+				Test Results Console
+		        </div>
+				<textarea id="fbDashConsoleC" class="textConsole" readonly>
+		    	</textarea>
+
+				<textarea id="cfbEditor"></textarea>
+
+			</div>
+
+
+		</div>
+		<!-- COMPLETED FEEDBACK SECTION ENDS -->
+
+	</div>
+	<!-- BODY ENDS -->
+
+<!--Admin section ends-->
+<%} else if (!req.isAuthenticated()) {%>
+	 <% res.redirect("/login?d=admin"); %>
+<%} else {%>
+	<nav class="navbar navbar-default">
+			<div class="container-fluid">
+					<div class="navbar-header">
+							<a class="navbar-brand" href="#">Admin Page</a>
+					</div>
+					<form class="navbar-form navbar-right">
+							<a href="/login/logout" id="logout" class="btn btn-default">Logout</a>
+					</form>
+			</div>
+ </nav>
+ <p>You must be an admin to view this page</p>
+<%}%>
+</div>

@@ -1,0 +1,1485 @@
+<link rel="stylesheet" href="lib/codemirror.css">
+<link rel="stylesheet" href="theme/mbo.css">
+<link rel="stylesheet" href="addon/display/fullscreen.css">
+<link rel="stylesheet" href="theme/tab.css">
+
+<!-- Jorge edit start -->
+<link rel="stylesheet" href="styles/index.css">
+<!-- Jorge edit end -->
+
+<style>
+  html, body, .container-fluid, .col-md-9, #codemirror,#codemirror2,#codemirror3, .CodeMirror {
+    height: 95%;
+  }
+
+  .CodeMirror {
+    line-height: 1.05em;
+    height: 26em;
+  }
+
+  .spin {
+    -webkit-animation: spin 1s infinite linear;
+    -moz-animation: spin 1s infinite linear;
+    -o-animation: spin 1s infinite linear;
+    animation: spin 1s infinite linear;
+    -webkit-transform-origin: 50% 58%;
+    transform-origin:50% 58%;
+    -ms-transform-origin:50% 58%; /* IE 9 */
+  }
+
+  @-moz-keyframes spin {
+    from {
+      -moz-transform: rotate(0deg);
+    }
+    to {
+      -moz-transform: rotate(360deg);
+    }
+  }
+
+  @-webkit-keyframes spin {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* @group Blink */
+
+  .blink {
+    -webkit-animation: blink 1s linear infinite;
+    -moz-animation: blink 1s linear infinite;
+    -ms-animation: blink 1s linear infinite;
+    -o-animation: blink 1s linear infinite;
+    animation: blink 1s linear infinite;
+  }
+
+  @-webkit-keyframes blink {
+    0% { color:white; }
+    50% { color:white; }
+    50.01% { color:black; }
+    100% { color:black; }
+  }
+
+  @-moz-keyframes blink {
+    0% { color:white; }
+    50% { color:white; }
+    50.01% { color:black; }
+    100% { color:black; }
+  }
+
+  @-ms-keyframes blink {
+    0% { color:white; }
+    50% { color:white; }
+    50.01% { color:black; }
+    100% { color:black; }
+  }
+
+  @-o-keyframes blink {
+    0% { color:white; }
+    50% { color:white; }
+    50.01% { color:black; }
+    100% { color:black; }
+  }
+
+  @keyframes blink {
+    0% { color:white; }
+    50% { color:white; }
+    50.01% { color:black; }
+    100% { color:black; }
+  }
+
+  /* @end */
+
+  .left-menu {
+    height:100%;
+  }
+  .scrollableAccordian {
+    height:100%;
+    overflow: scroll;
+  }
+  .CodeMirror-scroll {
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+  .console {
+    background-color: #3a2b2b;
+    color: #eeeeff;
+    padding: 3px 10px;
+    margin-top: -4px;
+  }
+  .textConsole {
+    width: 100%;
+    background-color: #edeff0;
+    font-family: "Arial";
+    font-weight: 600;
+    font-size: 16px;
+    color:firebrick;
+  }
+
+
+  .nav {
+    height:33px;
+  }
+
+  .navbar-button {
+    width:36px;
+    height:36px;
+    margin:6px;
+    padding:7px;
+    float:left;
+  }
+
+  .sidebarBuddy {
+    padding-top:3px;
+    padding-left:9px;
+    margin-left:2px;
+  }
+  #instructions {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .folderCollapse {
+    list-style-type: none;
+    padding:3px;
+    margin: 3px;
+  }
+  .folderCollapse  li {
+    padding: 0px;
+    margin: 0px;
+  }
+  .row {
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+
+  #introPanel {
+    background: url('http://www.unc.edu/~stotts/bricksVids/vidPanelBack0.jpg');
+    background: url('http://www.cs.unc.edu/Courses/cco-comp110/images/cubes-f.jpg');
+    background: url('http://www.unc.edu/~stotts/comp110/pix/cubes-g.jpg');
+    height:250px;
+    background-size: 100%;
+    background-repeat:no-repeat;
+    display: compact;
+    font: 13px/18px "Arial", Arial, sans-serif;
+    padding-top:10px;
+    padding-left:10px;
+    overflow-y:hidden;
+  }
+  <!--
+  // vidModal not used
+     #vidModal .modal-dialog {
+       width:900px;
+     //top:50px;
+     //right:200px;
+     //outline: none;
+     }
+  -->
+
+
+  .vidButton {
+    border-width:3px;
+    border-radius:5px;
+    color:#1E69A0;
+    font: bold Arial;
+    background-color:oldlace;
+    padding:5px;
+    margin-top:5px;
+    align:center;
+  }
+
+  .noVidButton {
+    border-width:1px;
+    border-radius:4px;
+    color:#666666;
+    font: bold Arial;
+    background-color:lightgray;
+    padding:6px;
+    margin-top:5px;
+    align:center;
+  }
+
+  .screenVid {
+    border:3px solid #D37564;
+    border-radius:6px;
+    width:100%; !important
+  //height:200;
+    preload:true;
+  }
+
+  <!--
+  // vidModal not used
+     #vidModal .modal-dialog .modal-content .modal-body .video {
+       border:4px solid #DC6D4C;
+       border-radius:7px;
+       width:10%; !important
+     //height:200;
+       preload:true;
+     }
+  -->
+
+  #desc-body {
+    border:5px;
+    overflow-y: scroll;
+    max-height: 200px; /* was 270px */
+    overflow: -moz-scrollbars-vertical;
+    font-size: 120%; /* added pds */
+    margin:-10px;
+  }
+  #desc-body-main {
+    overflow-y: scroll;
+    max-height: 400px;
+    overflow: -moz-scrollbars-vertical;
+    font-size: 120%; /* added pds */
+  }
+  #desc-body-noscroll {
+    font-size: 120%; /* added pds */
+  }
+
+  #submissions {
+    max-height: 400px;
+    overflow-y: scroll;
+    overflow: -moz-scrollbars-vertical;
+  }
+  .navbar-text {
+    color: #D2D2D2 !important;
+  }
+  .leftSidebarClosed {
+    padding-left:10px;
+  }
+  #leftSidebar {
+    padding-right:0px;
+  }
+
+  div.pds_hidden {
+    display:none; // intent is to hide green folders when desired
+  }
+
+  .responsive-video {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 60px; overflow: hidden;
+  }
+
+  .responsive-video iframe,
+  .responsive-video object,
+  .responsive-video embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .nav{
+    width:80%;
+    overflow-x: auto;
+  }
+
+  #sortable>li:hover{
+    background-color: #337ab7;
+  }
+
+/*wpoon <START>: Modal for Gather Student Code button*/
+  /*id = "getStudentPubCode"*/
+  body {font-family: Arial, Helvetica, sans-serif;}
+
+  /* The Modal (background) */
+  .student_modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  /* Modal Content */
+  .student_modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+
+  /* The Close Button */
+  .close_modal {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close_modal:hover,
+  .close_modal:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /*wpoon <END>: Modal for Gather Student Code button*/
+
+
+</style>
+<script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+<script src="lib/codemirror.js"></script>
+<script src="../mode/javascript/javascript.js"></script>
+<script src="../addon/selection/active-line.js"></script>
+<script src="../addon/display/fullscreen.js"></script>
+
+<script src="/js/acorn.js"></script>
+<script src="/js/pnut.js"></script>
+<script src="/js/index.js"></script>
+
+<!--<script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+-->
+<script>
+
+
+
+    <% if (!req.isAuthenticated()) { %>
+    <% res.redirect("/login"); %>
+    var loggedIn = false;
+
+    <% } else { %>
+    var loggedIn = true;
+
+    <%
+      User.find({admin: true}).exec(function(err, users) {
+        if(err) {
+          console.log("error: " + err);
+        } else {
+          if(users.length == 0) {
+            res.redirect("/user/setup");
+          }
+        }
+      });
+    %>
+
+    document.title="Bricks 4.0 JavaScript";
+</script>
+
+<!--NavBar for login-->
+<nav style="margin-bottom: 4px" class="navbar navbar-inverse" role="navigation">
+  <div class="container-fluid">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header" id="navbarHeader">
+      <button type="button" class="navbar-toggle" data-toggle="collapse"
+              data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="javascript:history.go(0)"
+         data-toggle="tooltip" data-placement="bottom" title="Home Panel / Refresh System">
+        <font color=oldlace><b>Bricks</b></font>
+      </a>
+      <a class="navbar-brand" href="http://eloquentjavascript.net/" target="_blankTEXT"
+         data-toggle="tooltip" data-placement="bottom" title="Online JavaScript text"
+      > <b>Text</b> </a>
+      <a class="navbar-brand" href="http://sakai.unc.edu" target="_blankLMS"
+         data-toggle="tooltip" data-placement="bottom" title="Sakai page for the course"
+      > <b>Sakai</b> </a>
+      <a class="navbar-brand" data-toggle="modal" data-target="#helpModal"
+      > <b>Help</b> </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <% if (req.isAuthenticated()) { %>
+      <div class="navbar-right">
+        <p class="navbar-text">Score: <span id="grade">0/0</span></p>
+
+          <% if (req.user.admin == true) { %>
+        <p class="navbar-text"><a id='adminToggle' style='color:skyblue;'><%= req.user.displayName %></a></p>
+          <% } else { %>
+        <p class="navbar-text"><%= req.user.displayName %></p>
+          <% } %>
+
+          <% if (req.user.admin == true) { %>
+        <div class="topbarBuddy "
+             style="width:4%;margin:3px;padding:5px;float:left;" id="togAdminStuElt">
+          <a type="button" id="togAdminStu" class="btn btn-navbar-button" aria-label="Left Align"
+             data-toggle="tooltip" data-placement="bottom" title="Admin / Instructor Mode" >
+              <span id="adminStuIcon" class="glyphicon glyphicon-font" aria-hidden="true"
+                    style="font-size:14pt;">
+              </span>
+          </a>
+        </div>
+          <% } else { %>
+        <!-- install a grab pub code icon -->
+          <% } %>
+
+        <form class="navbar-form navbar-right">
+          <a href="/login/logout" id="logout" class="btn btn-default">Logout</a>
+        </form>
+      </div>
+        <% } else { %>
+      <form class="navbar-form navbar-right"
+            action="https://onyen.unc.edu/cgi-bin/unc_id/authenticator.pl"
+            name="form1" method="POST">
+
+        <!-- 'title' is special; it will be used on the authenticator page. -->
+        <input type="hidden" name="title" value="COMP 110 Onyen Authentication">
+
+        <!-- Do we want to get the PID for this person? -->
+        <input type="hidden" name="getpid" value="displayName">
+
+        <input id="target" type="hidden" name="targetpass"
+               value="http://localhost:1337/login/authenticate">
+
+        <input type="hidden" name="locationfailtimeout"
+               value="https://onyen.unc.edu/cgi-bin/unc_id/authenticator.pl">
+
+        <input type="hidden" name="targetfail"
+               value="https://onyen.unc.edu/cgi-bin/unc_id/authenticator.pl">
+
+        <input type="hidden" name="textpass" value="You are now logged in!">
+
+        <input type="submit" class="btn btn-primary" name="submit" value="Log in">
+      </form>
+        <% } %>
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<!-- Unviewed Feedback -->
+<div class="modal fade" id="unseenFeedbackModal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Unread Feedback</h4>
+      </div>
+      <div class="modal-body" >
+        <p>You have unread feedback on the following problems:</p>
+        <ul id='unseenFeedbackBody'><ul>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pending Feedback -->
+<div class="modal fade" id="pendingFeedbackModal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Pending Requests</h4>
+      </div>
+      <div class="modal-body" >
+        <p>You have pending feedback requests on the following problems:</p>
+        <ul id='pendingFeedbackBody'><ul>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Pending Request Modal -->
+<div class="modal fade" id="pendingRequestModal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Pending Feedback Request</h4>
+      </div>
+      <div class="modal-body">
+        <b><span id="modalText1"></span></b><br /><br />
+        <b><span id="modalText2"></span></b><br /><br />
+        <div class="alert alert-warning" id="submissionMessage"></div>
+        <textarea id="modalCodemirror"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="cancelRequest"
+                data-dismiss="modal">Cancel Request
+        </button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Submit Request Modal -->
+<div class="modal fade" id="submitRequestModal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Request Feedback</h4>
+      </div>
+      <div class="modal-body">
+        <b>Submitting a feedback request will send a notification to your professor/TAs
+          who will review your code and respond to any questions asked in the area below.</b>
+        <br/><br/>
+        <textarea name="fbResponseMessage" id="submitRequestMsg" class="form-control"
+                  placeholder="Enter questions for professor here...">
+        </textarea>
+        <br/>
+        <textarea id="requestModalCodemirror"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="submitRequest"
+                data-dismiss="modal">Submit Request
+        </button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Reload Submission Modal -->
+<div class="modal fade" id="loadSubmissionModal" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <!--HEAD-->
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Load Submission?</h4>
+      </div>
+
+
+      <!--BODY-->
+      <div class="modal-body">
+        Do you want to load this code into the current text editor?<br/><br/>
+        <textarea id="reloadCodemirror"></textarea>
+      </div>
+
+
+
+      <!--FOOTER-->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="loadSubmission"
+                data-dismiss="modal">Reload
+        </button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!--wpoon<START>: Modal window for student share code -->
+<!-- Reload Submission Modal -->
+<!--<div class="modal fade" id="Student_Modal" role="dialog">-->
+  <!--<div class="modal-dialog">-->
+
+    <!--&lt;!&ndash; Modal content&ndash;&gt;-->
+    <!--<div class="modal-content">-->
+
+      <!--&lt;!&ndash;HEAD&ndash;&gt;-->
+      <!--<div class="modal-header">-->
+        <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+        <!--<h4 class="modal-title">Load Submission?</h4>-->
+      <!--</div>-->
+
+
+      <!--&lt;!&ndash;BODY&ndash;&gt;-->
+      <!--<div class="modal-body">-->
+        <!--Do you want to load this student code into the current text editor?<br/><br/>-->
+        <!--<textarea id="reloadCodemirror"></textarea>-->
+      <!--</div>-->
+
+
+
+      <!--&lt;!&ndash;FOOTER&ndash;&gt;-->
+      <!--<div class="modal-footer">-->
+        <!--<button type="button" class="btn btn-primary" id="loadSubmission"-->
+                <!--data-dismiss="modal">Reload-->
+        <!--</button>-->
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+<!--wpoon<END>: Modal window for student share code -->
+
+
+
+
+
+<!--Content-->
+<!--Question Info -->
+<div id="leftSidebar" class="col-md-3"  >
+  <!--
+    <div id="vidPanel" class="panel-group" style="padding-bottom:-30px">
+       <video class="screenVid" controls="controls" >
+         <source src="http://www.cs.unc.edu/Courses/cco-comp110/bricksVids/vidZero.mp4"
+         type="video/mp4"/>
+         Your browser does not support the video tag.
+       </video>
+    </div>
+  -->
+  <div style="padding-bottom:6px;padding-top:-6px">
+    <a type="button" id="accShow" class="btn btn-default" aria-label="Left Align"
+       data-toggle="tooltip" data-placement="bottom" title="Open/Close All Module Folders">
+      <font size=+1 color=midnightblue face="arial"><b>Modules &nbsp</b></font>
+      <span id="accShowIcon" class="glyphicon glyphicon-folder-open" aria-hidden="true"
+            style="font-size:12pt;">
+    </span>
+    </a>
+  </div>
+
+  <!-- Jorge edit start -->
+  <div class="mainButtons" style="padding-bottom:6px;padding-top:-6px">
+    <a type="button" id="expandSidebarIn" class="btn btn-default"
+       data-toggle="tooltip" data-placement="bottom" title="Condense Sidebar"
+       aria-label="Left Align">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"
+          style="font-size:12pt;">
+    </span>
+    </a>
+    <a type="button" id="expandSidebarOut" class="btn btn-default"
+       data-toggle="tooltip" data-placement="bottom" title="Expand Sidebar"
+       aria-label="Left Align">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"
+          style="font-size:12pt;">
+    </span>
+    </a>
+    <!--
+        <a type="button" id="accShow" class="btn btn-default" aria-label="Left Align"
+         data-toggle="tooltip" data-placement="bottom" title="Open/Close Module Folders">
+        <span id="accShowIcon" class="glyphicon glyphicon-folder-open" aria-hidden="true"
+           style="font-size:12pt;">
+        </span>
+        </a>
+    -->
+    <a type="button" id="accDoneShow" class="btn btn-default"
+       aria-label="Left Align" data-toggle="tooltip" data-placement="bottom"
+       title="Hide/View Green Modules (Done Modules)">
+    <span id="accDoneShowIcon" class="glyphicon glyphicon-check" aria-hidden="true"
+          style="font-size:13pt;">
+    </span>
+    </a>
+    <a type="button" id="accFutureShow" class="btn btn-default" aria-label="Left Align"
+       data-toggle="tooltip" data-placement="bottom" title="Hide/View Blue Modules (Future Modules)">
+    <span id="accFutureShowIcon" class="glyphicon glyphicon-eye-close" aria-hidden="true"
+          style="font-size:13pt;">
+    </span>
+    </a>
+    <!--
+      </div>
+      <div class="sidebarBuddy" style="width:0.5in;margin:0px;padding-left:5px;float:left;"
+           id="getPubCodeArea">
+    -->
+
+
+
+
+
+    <a type="button" id="getStudentPubCode" class="btn" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="" data-original-title="Get Student Published Code, if any" style="background-color:#7BAFD4;">
+      <span id="getPubCodeIcon" class="glyphicon glyphicon-cloud-download" aria-hidden="true" style="font-size:14pt; color:white;">
+      </span>
+    </a>
+    <!--wpoon <START>: Add Modal for StudentIcon-->
+      <!-- The Modal -->
+      <div id="Student_Modal" class="student_modal">
+
+        <!-- Modal content -->
+        <div class="student_modal-content">
+          <span class="close_modal" onclick="myFunction()">&times;</span>
+          <p>
+            <table class="table">
+              <thead>
+                <tr>
+                  <td>CheckBox</td>
+                  <td>Student Name</td>
+                  <td>Tab Name</td>
+                  <td>Time of Share</td>
+                </tr>
+              </thead>
+
+              <tbody id="S_Modal">
+              <!--<tr>-->
+                <!--&lt;!&ndash;<td id="S_Modal_name">hi</td>&ndash;&gt;-->
+                <!--&lt;!&ndash;<td><a id="S_Modal_tab_name">hi</a></td>&ndash;&gt;-->
+                <!--&lt;!&ndash;<td>list</td>&ndash;&gt;-->
+              <!--</tr>-->
+              </tbody>
+
+              <tfoot id="S_Modal_tfoot"></tfoot>
+            </table>
+          </p>
+        </div>
+
+      </div>
+  <!--wpoon<END>: Add Modal for StudentIcon -->
+
+
+    <a type="button" id="getPubCode" class="btn btn-info" aria-label="Left Align"
+       data-toggle="tooltip" data-placement="top" title="Get Published Code, if any" >
+      <span id="getPubCodeIcon" class="glyphicon glyphicon-cloud-download"
+            aria-hidden="true" style="font-size:14pt;">
+      </span>
+    </a>
+
+
+
+    <a type="button" id="refreshGather" class="btn" aria-label="Left Align" data-toggle="tooltip" data-placement="top" title="" data-original-title="Refresh Shared Code">
+      <span id="getPubCodeIcon" aria-hidden="true" style="font-size:14pt;">
+      </span>
+    </a>
+
+
+
+  </div>
+
+
+
+  <!-- Jorge Edit End -->
+
+
+  <div class="panel-group scrollableAccordian " id="folderAccordion" style="padding-top:0px">
+
+  </div>
+  <!--Folder Nav-->
+</div>
+
+<!--CODE-->
+<div id="right-side" class="col-md-9" style="padding-left:10px;height:100%">
+  <div class="row " id="hideInst" >
+    <div id="instructions" class='panel panel-default' >
+      <div class='panel-heading' >
+        <h3 class='panel-title'>
+            <span id="desc-title" >
+                   <font size=+2 color="#2C5E97"></font>
+                   <font size=+2 color="black">
+                <a href="http://www.cs.unc.edu/Courses/cco-comp110/bricksVids/welcome-comp110-M.mp4"
+                   target="_blank">
+                <b>Welcome Algorithm Architects !!</b>
+                </a>
+              </font>
+              <font size=+1 color="#4294A1">
+                <i> &nbsp  We will be making working stuff out of pure thought.</i>
+              </font>
+            </span>
+        </h3>
+      </div>
+      <div class='panel-body' style="overflow:hidden">
+        <div id="desc-body" style="overflow-y:scroll">
+          <div id="introPanel" class="vidMenu" >
+            <font size=+1 color="#813829"></font>
+            <font size=+1 color="brown">
+              <b>These videos will get us up and running.
+                Please watch them in order.</b>
+            </font>
+            <div style="padding-top:4px" > </div>
+            <table>
+              <tr>
+                <td>
+                  <a href="http://www.cs.unc.edu/Courses/cco-comp110/bricksVids/intro.navbricks.mp4"
+                     target="_blank" title="Video 1">
+                    <font size=+1 color="darkslategray">
+                      <button type='button' id="introVidButton1"
+                              data-toggle='modal' data-target='#vidModal'
+                              src='http://www.cs.unc.edu/Courses/cco-comp110/bricksVids/intro.navbricks.mp4'
+                              class='span4 proj-div text-right vidButton'>
+                        <font size=-1 color=black><b>Click for VIDEO</b>
+                          <span class='glyphicon glyphicon-facetime-video' ></span>
+                        </font>
+                      </button>
+                      <b>1: How to navigate Bricks</b>
+                    </font>
+                  </a>
+
+                  <br/>
+
+                  <a href="http://www.cs.unc.edu/Courses/cco-comp110/bricksVids/intro.brickscolors.mp4"
+                     target="#vidTab" title="Video 2">
+                    <font size=+1 color="darkslategray">
+                      <button type='button' id="introVidButton2"
+                              data-toggle='modal' data-target='#vidModal'
+                              src='http://www.cs.unc.edu/Courses/cco-comp110/bricksVids/intro.brickscolors.mp4'
+                              class='span4 proj-div text-right vidButton'>
+                        <font size=-1 color=black><b>Click for VIDEO</b>
+                          <span class='glyphicon glyphicon-facetime-video'></span>
+                        </font>
+                      </button>
+                      <b>2: What do the colors mean?</b>
+                    </font>
+                  </a>
+
+                </td>
+                <td>
+                  &nbsp &nbsp
+                  &nbsp &nbsp
+                </td>
+                <td>
+                  <a href="http://www.cs.unc.edu/Courses/cco-comp110/bricksVids/intro.howsubmit.mp4"
+                     target="#vidTab" title="Video 3">
+                    <font size=+1 color="darkslategray">
+                      <button type='button' id="introVidButton3"
+                              data-toggle='modal' data-target='#vidModal'
+                              src='http://www.cs.unc.edu/Courses/cco-comp110/bricksVids/intro.howsubmit.mp4'
+                              class='span4 proj-div text-right vidButton'>
+                        <font size=-1 color=black><b>Click for VIDEO</b>
+                          <span class='glyphicon glyphicon-facetime-video'></span>
+                        </font>
+                      </button>
+                      <b> 3: Write, test, submit a program</b>
+                    </font>
+                  </a>
+
+                  <br/>
+
+                  <a href="http://www.cs.unc.edu/Courses/cco-comp110/bricksVids/intro.helpreq.mp4"
+                     target="#vidTab" title="Video 4">
+                    <font size=+1 color="darkslategray">
+                      <button type='button' id="introVidButton4"
+                              data-toggle='modal' data-target='#vidModal'
+                              src='http://www.cs.unc.edu/Courses/cco-comp110/bricksVids/intro.helpreq.mp4'
+                              class='span4 proj-div text-right vidButton'>
+                        <font size=-1 color=black><b>Click for VIDEO</b>
+                          <span class='glyphicon glyphicon-facetime-video'></span>
+                        </font>
+                      </button>
+                      <b> 4: Requesting help on a program</b>
+                    </font>
+                  </a>
+
+                </td>
+              </tr>
+            </table>
+            <font size=+0 color="dimgray">
+              <p></p><p>
+                <b>
+                  After watching the videos <font size=+3 color=darkslategray>&uarr;</font>,
+                  you will be ready to work on the
+                  <br/>
+                  Modules in the left side bar, in top-down order.
+                  <br/>
+                  <font size=+4 color=darkslategray>&larr;</font>
+                </b>
+              </p>
+            </font>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" >
+    <div id="consoleHeader" class="console" >
+      Testing Messages
+    </div>
+    <textarea id="console" class="textConsole" readonly> </textarea>
+  </div>
+
+  <div class="row pointbreakdownbox" id="problemControlPanel" style="margin-top:4px;">
+    <div class="sidebarBuddy alert alert-info" style="padding:2px;width:35%;float:left;">
+      <button id="test" type="button" class="btn btn-warning"
+              style="width:49%;text-align:center;margin-bottom:3px"
+              data-placement="top" title="Test All">Test All
+      </button>
+      <span id="submitButtonTooltip" data-placement="top" title="Submit for Score">
+          <button data-toggle="modal" data-target="#myModal" class="btn btn-success hidden"
+                  style="width:49%;text-align:center;margin-bottom:3px;"
+                  id="initSubmit" disabled="disabled">Submit for Score
+          </button>
+        </span>
+      <button id="reload" type="button" class="btn btn-primary hidden"
+              style="width:49%;text-align:center;margin-bottom:1px" disabled="disabled"
+              data-placement="top" title="Reload Last" >Reload Last
+      </button>
+      <button id="save" type="button" class="btn btn-info "
+              style="width:49%;text-align:center;float:right;margin-right:2px;margin-bottom:1px;"
+              data-placement="top" title="Save Code" > Save
+      </button>
+    </div>
+
+    <div id="recentpointbreakdown" class=" alert alert-warning sidebarBuddy hidden"
+         style="height:75px;width:20%;float:left;">
+
+      <b id='recentScoreLabel'>Most Recent Score:<br/></b>
+
+      <div id="recentCorrectDiv">
+        <span id="recentFuntionalityLabel">Functionality </span>
+        <span id="correctCheckRecent" class="pull-right"></span>
+        <span class="badge pull-right">
+             <span id="recentPtCorrect">0</span>/<span class="availablePtCorrect"></span>
+          </span>
+      </div>
+      <div id="recentStyleDiv">
+        <span id="recentStyleLabel">Style </span>
+        <span id="styleCheckRecent" class="pull-right"></span>
+        <span class="badge pull-right">
+             <span id="recentPtStyle">0</span>/<span class="availablePtStyle"></span>
+          </span>
+      </div>
+    </div>
+    <div id="pointbreakdown" class=" alert alert-warning sidebarBuddy hidden"
+         style="height:75px;width:20%;float:left;">
+      <b id='highestScoreLabel'>Highest Score:<br/></b>
+
+      <div id="highestCorrectDiv">
+        <span id="highestFuntionalityLabel">Functionality </span>
+        <span id="correctCheck" class="pull-right"></span>
+        <span class="badge pull-right">
+            <span id="highestPtCorrect">0</span>/<span id="availptc" class="availablePtCorrect"></span>
+          </span>
+      </div>
+      <div id="highestStyleDiv">
+        <span id="highestStyleLabel">Style </span>
+        <span id="styleCheck" class="pull-right"></span>
+        <span class="badge pull-right">
+            <span id="highestPtStyle">0</span>/<span id="availpts" class="availablePtStyle"></span>
+          </span>
+      </div>
+    </div>
+
+    <div class="sidebarBuddy alert alert-info" style="height:75px;width:14%;float:left;"
+         id="fontSizeBox">
+      <label id="fontSizeLabel" class="control-label" for="fontSize">Font Size:</label>
+      <div class="form-group" style="margin:0px;" id="fontSizeDropdown">
+        <select class="form-control" id="fontSize" autocomplete="off">
+          <option value="10">10pt</option>
+          <option value="12">12pt</option>
+          <option value="14" selected>14pt</option>
+          <option value="16">16pt</option>
+          <option value="18">18pt</option>
+          <option value="20">20pt</option>
+          <option value="24">24pt</option>
+          <option value="28">28pt</option>
+          <option value="32">30pt</option>
+          <option value="36">36pt</option>
+          <option value="40">46pt</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sidebarBuddy " style="width:5%;margin:0px;padding:1px;float:left;" id="expandControlPanel">
+      <a type="button" id="miniBar" class="btn btn-default" aria-label="Left Align"
+         data-toggle="tooltip" data-placement="top" title="Adjust Panel Size" >
+          <span id="miniBarIcon" class="glyphicon glyphicon-resize-full" aria-hidden="true"
+                style="font-size:14pt;">
+          </span>
+      </a>
+    </div>
+
+      <% if (req.user.admin == true) { %>
+
+    <div class="sidebarBuddy" style="width:3%;margin:0px;padding:1px;float:left;"
+         id="pubCodeArea">
+      <a type="button" id="pubCode" class="btn btn-success" aria-label="Left Align"
+         data-toggle="tooltip" data-placement="top" title="Publish Editor Code" >
+            <span id="pubCodeIcon" class="glyphicon glyphicon-share" aria-hidden="true"
+                  style="font-size:14pt;">
+            </span>
+      </a>
+    </div>
+
+
+    <!-- install a grab pub code icon -->
+    <!--
+            <div class="sidebarBuddy" style="width:0.5in;margin:0px;padding-left:5px;float:right;"
+                 id="getPubCodeArea">
+              <a type="button" id="getPubCode" class="btn btn-mellow" aria-label="Left Align"
+                 data-toggle="tooltip" data-placement="top" title="Get Published Code" >
+                <span id="getPubCodeIcon" class="glyphicon glyphicon-cloud-download"
+                  aria-hidden="true" style="font-size:14pt;">
+                </span>
+              </a>
+            </div>
+    -->
+
+      <% } else { %>
+    <!-- install a grab pub code icon -->
+    <!-- if you are not admin -->
+
+      <% } %>
+
+  </div>
+
+
+  <div id="demoTabs">
+    <ul id="sortable" class="nav nav-pills" style = "margin-left:170px;">
+      <li id="list_1" class="fixed"><a href="#main">Main</a>
+      </li>
+        <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[3]) { %>
+      <li id="list_2"><a href="#editor2"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[3]%></a>
+      </li>
+        <% } %>
+
+        <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[5]) { %>
+      <li id="list_3"><a href="#editor3"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[5]%></a>
+      </li>
+        <% } %>
+
+        <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[7]) { %>
+      <li id="list_4"><a href="#editor4"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[7]%></a>
+      </li>
+        <% } %>
+        <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[9]) { %>
+      <li id="list_5"><a href="#editor5"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[9]%></a>
+      </li>
+        <% } %>
+
+    </ul>
+    <div class = "testsection" style = "margin-top:10px;">
+      <button id="testTab" type="button" class="btn btn-warning"
+              style="width:110px;height:33px;text-align:center;margin-top:-55px;margin-right20px;float:left;">
+            <span id="accShowIcon" class="glyphicon glyphicon-play" class="button button-mellow" aria-hidden="true"
+                  style="font-size:12pt;" data-toggle="tooltip" data-placement="top" title="Test Current Tab">
+            </span>
+        &nbsp Test Tab
+      </button>
+    </div>
+    <div class="tab-content">
+      <div id="main" class="tab-pane">
+        <!--CodeMirror Start-->
+        <div class="row" style="height:100%">
+            <% if (req.isAuthenticated()) { %>
+          <textarea id="codemirror1"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[0]%></textarea>
+            <%} else {%>
+          <textarea id="codemirror1"></textarea>
+            <%}%>
+        </div>
+
+        <!--CodeMirror End-->
+      </div>
+
+      <div id="editor2" class="tab-pane">
+        <!--CodeMirror Start-->
+        <div class="row" style="height:100%">
+          <textarea id="codemirror2"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[2]%></textarea>
+        </div>
+
+        <!--CodeMirror End-->
+      </div>
+
+      <div id="editor3" class="tab-pane">
+
+        <!--CodeMirror Start-->
+        <div class="row" style="height:100%">
+          <textarea id="codemirror3"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[4]%></textarea>
+        </div>
+
+        <!--CodeMirror End-->
+      </div>
+
+        <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[7]) { %>
+
+      <div id="editor4" class="tab-pane">
+        <div class="row" style="height:100%">
+          <textarea id="codemirror4"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[6]%></textarea>
+        </div>
+      </div>
+        <% } %>
+
+        <%if (req.user.latestCode.split(/\/\/\s\/\*\/|\?end\?/)[9]) { %>
+
+      <div id="editor5" class="tab-pane">
+        <div class="row" style="height:100%">
+          <textarea id="codemirror5"><%=req.user.latestCode.split(/\/\/\s\/\*\/|\/\/\*\//)[8]%></textarea>
+        </div>
+      </div>
+        <% } %>
+
+    </div>
+  </div>
+
+  <div id="add">
+    <form class="form-inline">
+      <input type="text" class="form-control mb-2 mr-sm-2 mb-sm-0" for="tabname" id="tabname" placeholder="Name of new console" style="margin-top:2%;margin-bottom:3px;margin-right:2%;">
+      </input>
+
+      <button id='addTabs' class="btn btn-success" style="margin-top:2%;margin-bottom:3px;"><span class="glyphicon glyphicon-plus" aria-hidden="true">
+            </span>&nbsp Create Console</button>
+      <button id="removeTabs" class="btn btn-danger"
+              style="width:210px;text-align:center;margin-bottom:3px;margin-top:2%;margin-left:2%;">
+              <span id="accShowIcon" class="glyphicon glyphicon-remove" aria-hidden="true"
+                    style="font-size:12pt;">
+              </span>
+        &nbsp Remove Current Console
+      </button>
+    </form>
+  </div>
+  </br>
+
+  <div class="row" >
+    <div id="submissions" class='panel panel-default hidden'>
+      <div class='panel-heading'>
+        <h3 class='panel-title'>Past Submissions </h3>
+      </div>
+      <table class="table" >
+        <thead>
+        <tr id="subsHead">
+          <td>Time of submission</td>
+          <td>Functionality</td>
+          <td>Style</td>
+        </tr>
+        </thead>
+        <tbody id="subs"> </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!--
+  <button id="test" type="button" class="btn btn-default ">Test</button>
+  <button data-toggle="modal" data-target="#myModal" class="btn btn-default "
+id="initSubmit" disabled="disabled">Submit
+</button>
+  -->
+
+  <!-- Modal -->
+
+    <% if (req.isAuthenticated()) { %>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-hidden="true">&times;
+          </button>
+          <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to submit your assignment?<br />
+          Please make sure you have tested your code.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+          <button id="submit" type="button" data-dismiss="modal"
+                  class="btn btn-primary">Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <%} else {%>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-hidden="true">&times;
+          </button>
+          <h4 class="modal-title" id="myModalLabel">Please Login</h4>
+        </div>
+        <div class="modal-body">
+          You must login before you can submit a program for scoring.  <br/>
+          Please make sure you have tested your code locally.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <%}%>
+
+</div>
+
+
+<!-- Video -->
+<!-- not used -->
+<!--
+<div id="vidModal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width:100%">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <font size=+2><b>&times;</b></font>
+        </button>
+        <div id="vidModalLabel">
+          <label>Video for this Problem</label>
+        </div>
+      </div>
+
+      <div class="modal-body" >
+        <video class="screenVid" controls="controls" >
+          <source src=" " type="video/mp4"/>
+          Your browser does not support the video tag.
+        </video>
+      </div>
+-->
+
+<!--
+      <div class="modal-body">
+        <iframe width="854" height="480" frameborder="0" allowfullscreen>
+        </iframe>
+      </div>
+-->
+<!--
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+-->
+
+<!-- Modal -->
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Help</h4>
+      </div>
+      <div class="modal-body">
+        <a name="index"></a>
+        <h3>Online Help for Bricks</h3>
+        Choose from these help topics:
+        <ul>
+          <li><a href="#titlebar">Top title bar</a></li>
+          <li><a href="#modsidebar">The Modules sidebar</a></li>
+          <li><a href="#modcolors">Module colors</a></li>
+          <li><a href="#editor">Code editor</a></li>
+          <li><a href="#savecode">Saving your code</a></li>
+          <li><a href="#testlocal">Test Locally and Submit</a></li>
+          <li><a href="#feedback">Getting Feedback on a Submission</a></li>
+          <li><a href="#sharing">Sharing your work</a></li>
+        </ul>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+
+        <a name="titlebar"></a>
+        <hr>
+        <br/>
+        <h4>Top title bar</h4>
+        <p>
+          At the top of the Bricks window is a black title bar with several clickable items.
+        </p>
+        <p>
+          On the left side we have these:
+        <ul>
+          <li> <b>Bricks:</b> this link will take you to the main Bricks home screen, the one
+            with the intro videos.  </li>
+          <li> <b>Text:</b> this link will open the class on-line electronic text book in
+            a separate browser tab.  </li>
+          <li> <b>Sakai:</b> this link will open Sakai in a separate browser tab, so you can
+            more easily view the other class materials.  </li>
+          <li> <b>Help:</b> (how you got here!) this link takes you to a pop up window with
+            explanatory information in it.  </li>
+        </ul>
+        </p>
+        <p>
+          On the right side we have these:
+        <ul>
+          <li> <b>Score:</b> This data field shows your cumulative points earned compared
+            to the max possible points.  </li>
+          <li> <b>Name:</b> This data field shows the user name that is recorded
+            for your onyen.  </li>
+          <li> <b>Logout:</b> Click here to end your Bricks session.
+            All editing will be saved. </li>
+        </ul>
+        </p>
+        <a href="#index">return to index</a>
+
+        <a name="modsidebar"></a>
+        <hr>
+        <br/>
+        <h4>The Modules sidebar</h4>
+        <p>
+          The vertical panel on the left side of the Bricks window is the Modules sidebar.
+          It is a list of the lesson modules you must complete; and the order of work is
+          top down.
+        </p>
+        <p>
+          First, each module is an expandable folder containing problems to work on (VID, DIY, EXAM, WALL).
+          If you click on a module it will expand and show a list of clickable problems;
+          click again on the module and it will compress.
+          When a module is expanded, you can click on an individual problem to load the
+          information for it into the problem description window and the code editor
+          window on the right side of Bricks.
+        </p>
+        <p>
+          There are several icons at the top where the "Modules" title is; these icons
+          allow you to manipulate the view you get of course work.
+          The "left chevron" icon will make the Modules sidebar more narrow (take up less screen real estate).
+          The "right chevron" icon will make the Modules sidebar wider (take up more screen real estate).
+          The "checkbox" icon with the "Modules" title is a toggle that will hide/show the green (completed)
+          module folders.
+          The "eye" icon similarly is a toggle that will hide/show the future modules (light blue); future modules
+          are work we will be doing, but for which no problems have yet been released.
+          The "folder" icon is a toggle that will open/close ALL the module folders so you can more easily
+          scan for a particular problem.
+        </p>
+        <a href="#index">return to index</a>
+
+        <a name="modcolors"></a>
+        <hr>
+        <br/>
+        <h4>Module colors</h4>
+        <p>
+          Lesson Modules appear in the panel on the left side of the Bricks window.
+          Modules are meant to be completed in top-down order.
+          All modules are visible at the beginning of the course, but some will have no
+          problems released inside them.  These are "future" modules, and they have a light blue color.
+          The "eye" icon to the right of the "Modules" title can be used to hide the future, light blue
+          folders.  You may find this useful in keeping your interface uncluttered.
+        </p>
+        <p>
+          Each week I will release problems in several modules, assuming you have completed the modules
+          up to that points.
+          A module will be colored light red (pink) when it has probles to work in it, but you have not
+          yet started them.  Each week you will see new pink-red modules for the week's work.
+        </p>
+        <p>
+          Once you start working on the problems in a module... once you make a submission on a problem... the
+          module will change to a yellow color.  This shows you have started that work, but not yet completed it.
+        </p>
+        <p>
+          Once you have completed all the problems in a module (VID and DIY) the module will be colored green
+          and shows a green checkmark.  This is a quick visual indicator or where you have more work to do.
+          The checkbox icon next to the "Modules" title can be used to hide the green completed folders,
+          making your interface less cluttered.
+        </p>
+        <a href="#index">return to index</a>
+
+        <a name="editor"></a>
+        <hr>
+        <br/>
+        <h4>Code editor</h4>
+        <p>
+          The code editor window is the large black panel that takes up most of the right side of Bricks.
+          This is a "wysiwyg" text editor that knows something about the syntax of JavaScript.
+          You may used your mouse to cut and paste in the editor window, as with most text editors.
+          You will notice that as you type in program text, the editor will highlight and color some of your text
+          to help you recognize the structure of your program.  The colors will also help you find mistakes
+          as your type.
+        </p>
+        <p>
+          Orange is used for keywords such as "function" and "var".  Orange is also used for text strings.
+          White is used for global variable names, as well as for function names, and strings that are not
+          recognized as parts of the language (such as mis-spelled variable names).
+          Teal is used for declared local variables and for number constants.
+          Light blue is used for field names and method names in objects.
+        </p>
+        <p>
+          You may enter text into the window from the keyboard, or from the cut/paste buffer.
+          Bricks also has a couple shortcut methods for loading your previous programs into the
+          editor window for you to build new code based on older code.
+        <ul>
+          <li>
+            Below the code editor window is a clickable list of every program you have submitted for
+            the current problem.  If you click on a submission link, you will get a window showing you
+            the code for that submission.  A button will be at the bottom of that window that will load
+            that code into the editor window.  <b>Note that loading code this way will stomp over any
+              code you may have in the editor window already</b>.  If you need to save code that is in
+            the editor window first, you may submit it (to the Bricks database) or use the "Save Code"
+            button in the mini-bar.
+          </li>
+          <br/>
+          <li>
+            <b>Reload Last:</b> this button appears in the mini-bar above the editor window.  It is the dark
+            blue button, in with the orange, green, and light blue buttons.
+            Clicking this button is a short cut for reloading the code for the most recent submission (the top
+            link in the clickable submissions list).
+          </li>
+        </ul>
+        </p>
+        <a href="#index">return to index</a>
+
+        <a name="savecode"></a>
+        <hr>
+        <br/>
+        <h4>Saving your code</h4>
+        <p>
+          Explain auto-saving and manual saving.
+          Explain reloading the editor window.
+        </p>
+        <a href="#index">return to index</a>
+
+
+        <a name="testlocal"></a>
+        <hr>
+        <br/>
+        <h4>Test Locally and then Submit!</h4>
+        <p>
+          Choose a problem from the left side bar. Once you have finished writing your code in
+          the black box, you can test your code with the "Test Locally" button and feedback will
+          appear in the gray box above the code editor. Once you are happy with your code the
+          "Submit for Score" button will record your points for the professor or TA to see.
+          Previous submissions for the problem will appear below the code editor.
+        </p>
+        <a href="#index">return to index</a>
+
+        <a name="feedback"></a>
+        <hr>
+        <br/>
+        <h4>Feedback</h4>
+        <p>
+          If you're having trouble, ask for help by clicking the "Request" button next to one
+          of your submissions.  Someone will read your request message and code and send you
+          feedback.  When the response is avaiable you'll see a green "Unread Feedback" in the
+          same location as the "Pending Requests" button appears in the navigation bar.  Unread
+          feedback will have a blinking "View" button in the Past Submissions list. An unanswered
+          feedback request can be canceled by clicking the "Pending" button.
+        </p>
+        <a href="#index">return to index</a>
+
+        <a name="sharing"></a>
+        <hr>
+        <br/>
+        <h4>Sharing</h4>
+        <p>
+          A professor may sometimes chose to show student's code in class for instructive purposes.
+          By clicking the "share" button you give permission for your code to be considered for
+          sharing.  This permission can be revoked at any time by pressing the green "Shared" button.
+        </p>
+        <a href="#index">return to index</a>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%} %>
+
